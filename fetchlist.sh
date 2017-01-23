@@ -1,7 +1,7 @@
 #!/bin/bash
 LOGFILE=/var/log/fetchlist.log
 DT=$(date +%Y%m%d-%H%M)
-VHOST=virtual_host_html_dir
+VHOST=zeus.claranet.pt
 mkdir -p /tmp/vhannibal/
 cd /tmp/vhannibal/
 #wget "http://www.vhannibal.net/download_setting.php?id=8&action=download" -O vhne1.rar
@@ -38,7 +38,7 @@ cd /tmp/vhannibal/
 
 #wget "http://www.vhannibal.net/download_setting.php?id=16&action=download" -O vhne2.rar
 #wget "http://zeus.claranet.pt/vhne2.rar" -O vhne2.rar 2> /dev/null
-curl -o vhne2.zip "http://www.vhannibal.net/setting/download.php?id=16&action=download"
+curl -o vhne2.zip "http://www.vhannibal.net/download_setting.php?id=16&action=download"
 sleep 2
 
 ## ENIGMA2

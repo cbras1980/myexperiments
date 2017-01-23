@@ -2,12 +2,13 @@ use LWP::UserAgent;
 use HTTP::Cookies;
 use JSON;
 use Test::JSON;
+use utf8;
+
+binmode STDOUT, ":utf8";
 
 my $mac = $ARGV[0];
 
-my $targethost = "target_url";
-
-my $myhost = "my_url";
+my $targethost = "tech.stmteam.org";
 
 #Replace a string without using RegExp.
 sub str_replace {
@@ -39,7 +40,8 @@ my $cookie = "mac=$mac; stb_lang=ru; timezone=Europe%2FKiev";
 my $ua = LWP::UserAgent->new;
  
 my $server_endpoint = "http://$targethost:8000/portal.php?type=stb&action=handshake&token=&JsHttpRequest=1-xml";
-my $server_endpoint2 = "http://$targethost:8000/portal.php?type=itv&action=get_all_channels&JsHttpRequest=1-xml";
+#my $server_endpoint2 = "http://$targethost:8000/portal.php?type=itv&action=get_all_channels&JsHttpRequest=1-xml";
+my $server_endpoint2 = "http://$targethost:8000//portal.php?type=itv&action=get_ordered_list&genre=48&fav=0&sortby=number&hd=0&p=0&JsHttpRequest=1%2Dxml&";
 
 my $req = HTTP::Request->new(GET => $server_endpoint);
 my $req2 = HTTP::Request->new(GET => $server_endpoint2);
@@ -79,10 +81,11 @@ $req2->header( 'Accept-Charset' => 'utf-8, iso-8859-1, utf-16, *;q=0.7' );
 $req2->header( 'Cookie' => $cookie );
 $req2->header( 'Authorization' => 'Bearer '.$token );
 
-
 $resp = $ua->request($req2);
+open(my $fh2, '>', 'channels.json') or die "Not able to open file";
 if ($resp->is_success) {
     my $message = $resp->decoded_content;
+    print $fh2 $message;
     $json = $resp->decoded_content;
     eval {    
         my $arquivo = $filemac.'-channels.txt';
@@ -101,13 +104,15 @@ if ($resp->is_success) {
             my $name = $value->{'name'};
             my $nameurl = $value->{'name'};
             my $stream = $value->{'cmd'};
+            my $logo = $value->{'logo'};
             $stream =~ s/auto //;
             $nameurl =~ s/ /%20/g;
-            print $fh "#EXTINF:-1 tvg-name=\"".$name."\" audio-track=\"pt\" tvg-logo=\"http://$myhost:8000/logos/".$nameurl.".png\" group-title=\"PORTUGAL\", ".$name."\n";
+            print $fh "#EXTINF:-1 tvg-name=\"".$name."\" audio-track=\"pt\" tvg-logo=\"$logo".$nameurl.".png\" group-title=\"PORTUGAL\", ".$name."\n";
             print $fh "".$stream."\n";
         }
         #print $fh $mac."\n";
         #print $fh "".$alldata->{'cmd'}."\n";
+        print "".$alldata->{'cmd'}."\n";
         close($fh);
     } or do {
         #my $e = $@;
@@ -119,3 +124,4 @@ else {
     print "HTTP GET error message: ", $resp->message, "\n";
 }
 
+close($fh2);
