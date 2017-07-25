@@ -50,13 +50,27 @@ LISTFOLDER=$(find . ! -path . -type d)
 md5sum -c /tmp/vhne2.md5 2> /dev/null
 if [ $? -ne 0 ]; then
 echo "$DT - Processing list: $LISTFOLDER" >> $LOGFILE
-#unrar x vhne2.rar
 echo "$LISTFOLDER"
-mv "$LISTFOLDER" source
-tar xfvz /var/www/$VHOST/lista_e2.tar.gz
-rsync -av --delete --update --include-from=/var/www/$VHOST/LISTFILE_E2 --exclude="*" source/ lista/
-cp /var/www/zeus.claranet.pt/bouquets.tv lista/
+mv "$LISTFOLDER" lista
+#tar xfvz /var/www/$VHOST/lista_e2.tar.gz
+#rsync -av --delete --update --include-from=/tmp/vhannibal/lista/LISTFILE_E2 --exclude="*" source/ lista/
+#rsync -DHCPRavz source/ lista/
+
+## Build bouquets.tv file
+echo "#NAME Bouquets (TV)" > lista/bouquets.tv
+for i in meo nos movistar; do
+echo "Processing $i"
+LIST=$(grep -i "name $i" * -R | head -n1 | cut -f1 -d: | cut -f2 -d\/)
+for j in $LIST; do
+echo "Adding $j"
+echo "#SERVICE: 1:7:1:0:0:0:0:0:0:0:$j" >> lista/bouquets.tv
+done
+done
+echo "#SERVICE: 1:7:1:0:0:0:0:0:0:0:userbouquet.dbe00.tv" >> lista/bouquets.tv
+
 echo "#NAME ---------- $(stat -c %y lista/lamedb | cut -f1 -d\ ) ----------" > lista/userbouquet.dbe00.tv
+echo "#Big thanks to MEPHISTO" >> lista/userbouquet.dbe00.tv
+
 tar czvf /var/www/$VHOST/lista_e2.tar.gz lista/
 #find /tmp -iname "*.rar" -delete
 md5sum vhne2.zip > /tmp/vhne2.md5 2> /dev/null
