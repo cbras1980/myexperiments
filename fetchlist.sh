@@ -1,4 +1,5 @@
 #!/bin/bash
+# Testing github and atom integration
 LOGFILE=/var/log/fetchlist.log
 DT=$(date +%Y%m%d-%H%M)
 VHOST=zeus.claranet.pt
