@@ -1,0 +1,136 @@
+<?php
+
+function clean($string) {
+   //$string = str_replace(' ', '-', $string); // Replaces all spaces with hyphens.
+   //$string = preg_replace('/[^A-Za-z0-9\-]/', '', $string); // Removes special chars.
+
+   //return preg_replace('/-+/', ' ', $string); // Replaces multiple hyphens with single one.
+   return preg_replace('!\s+!', ' ', $string);
+}
+
+function convertToDate($string) {
+    $tokens=explode(' ',$string);
+    $months=array('Jan' => '1', 'Fev' => '2', 'Mar' => '3', 'Abr' => '4', 'Mai' => '5', 'Jun' => '6', 'Jul' => '7', 'Ago' => '8', 'Set' => '9', 'Out' => '10', 'Nov' => '11', 'Dez' => '12');
+    $day=$tokens[1];
+    $month=$tokens[2];
+    $year=date("Y");
+    $hm=explode(':',$tokens[3]);
+    return date('U', mktime($hm[0],$hm[1],0,$months[$month],$day,$year));
+}
+
+function get_page_http($url, $login, $pass) {
+date_default_timezone_set('UTC');
+
+$weekdays=array('Seg' => '0', 'Ter' => '1', 'Qua' => '2', 'Qui' => '3', 'Sex' => '4', 'Sab' => '5', 'Dom' => '6');
+$fp = fopen('/var/www/cs.malignia.net/games.txt', 'w');
+
+/**
+* First connexion : sending the login form
+*
+**/
+   $ch = curl_init($url);
+
+   $headers = array();
+   $header[0] = "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8";
+   $header[] = "Accept-Encoding: gzip, deflate";
+   $header[] = "Accept-Language: en-US,en;q=0.9";
+   $header[] = "Cache-Control: max-age=0";
+
+   $streams=array();
+   $streams[' SPORT.TV1 ']='19;sptv1';
+   $streams[' SPORT.TV2 ']='20;sptv2';
+   $streams[' SPORT.TV3 ']='21;sptv3';
+   $streams[' SPORT.TV4 ']='22;sptv4';
+   $streams[' BENFICA TV ']='30;btv';
+   $streams[' RTP 1 ']='1;rtp1';
+
+   curl_setopt($ch, CURLOPT_URL, $url);
+   curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 0);
+   curl_setopt($ch, CURLOPT_VERBOSE, false);
+   curl_setopt($ch, CURLOPT_FRESH_CONNECT, TRUE);
+   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+   if (preg_match('`^https://`i', $url))
+      {
+      curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+      curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+      }
+   $response = curl_exec($ch);
+   curl_close($ch);
+   if ($response === FALSE) {
+      print (curl_error($ch));
+      die(curl_error());
+   }
+
+   libxml_use_internal_errors(true);
+   $dom = new DomDocument();
+   $dom->loadHTML($response);
+   libxml_use_internal_errors(false);
+   $tokens = $dom->getElementsByTagName("tr");
+   print "<div>\n<table class='ui inverted table'>";
+   //print "<thead class='center aligned'><th>Data</th><th>Jogo</th><th>Onde ver</th></thead>";
+   print "<tbody>";
+   for ($i = 0; $i < $tokens->length; $i++) {
+     $intokens = $tokens->item($i)->childNodes;
+     if(!isset($intokens->item(0)->nodeName) || $intokens->item(0)->nodeName != 'td') continue;
+     print "\n<tr>";
+     for ($j = 0; $j < $intokens->length; $j++) {
+       $meta = $intokens->item($j);
+       //print($meta->nodeName);
+       //if($meta->attributes->length>0) print($meta->attributes->item(0)->name);
+       if(isset($meta->nodeName) && $meta->nodeName == 'td') {
+         //print_r($meta->attributes->item(0)->value."\n");
+         if(strpos($meta->nodeValue, 'Ver mais jogos') !== false) {
+           continue;
+           $value = clean($meta->nodeValue);
+           if(isset($weekdays[substr($value,0,3)])) {
+                fwrite($fp, convertToDate($value));
+           }
+           if(isset($streams[$value])) {
+                fwrite($fp,$streams[$value]);
+           }
+           else {
+                //fwrite($fp, $value);
+           }
+           if(isset($streams[$value])) print "<a href='".$streams[$value]."'>".$value."</a>";
+           else print $value;
+           print "</td>";
+           fwrite($fp,";");
+         }
+       }
+       else
+         continue;
+     }
+     fwrite($fp, "\n");
+     print "\n</tr>";
+   }
+   $today = date("Y-m-d H:i:s");
+   print "\n<tr></tbody>";
+   print "<tfoot><td colspan='3' class='center aligned'>Actualizado: $today</td></tr></tfoot></table></div>";
+   fclose($fp);
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Onde ver o futebol</title>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+<script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+</head>
+<body>
+
+<?php
+$login='';
+$pass='';
+$url='';
+get_page_http($url, $login, $pass);
+?>
+
+</body>
+</html>
