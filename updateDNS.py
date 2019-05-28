@@ -33,8 +33,8 @@ resp = requests.get('https://{}/v4/domains/{}/records/{}'.format(api,domain,reco
 actip = json.loads(json.dumps(resp.json()))['answer']
 #print(actip)
 
-#get external ip address using ifconfig.co
-resp = requests.get('https://ifconfig.co/json')
+#get external ip address using ipfy.org API
+resp = requests.get('https://api.ipify.org?format=json')
 curip = json.loads(json.dumps(resp.json()))['ip']
 #print(curip)
 
