@@ -9,8 +9,8 @@
 CONF_FILE="/etc/remotessh.conf"
 
 # PORT RANGE
-$LOW=15000
-$HIGH=15500
+LOW=15000
+HIGH=15500
 
 if [ -f $CONF_FILE ]; then
   . $CONF_FILE
