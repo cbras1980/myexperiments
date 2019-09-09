@@ -1,4 +1,9 @@
 #!/bin/bash
+#################################################
+# Create config file with:
+# USER="username"
+# PASS="password"
+#################################################
 CONF_FILE="/etc/remotessh.conf"
 
 if [ -f $CONF_FILE ];
