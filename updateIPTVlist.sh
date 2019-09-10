@@ -8,8 +8,6 @@ else
   exit 1
 fi
 
-
-
 REPLACE=$(echo ${SERVER} | cut -f1 -d\.)
 
 rm -rf /etc/enigma2/userbouquet.dbe00.tv
