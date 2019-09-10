@@ -1,7 +1,14 @@
 #!/bin/sh
-SERVER="server.example.com"
-USER="user"
-PASS="pass"
+CONF_FILE="/etc/iptvlist.conf"
+
+if [ -f $CONF_FILE ]; then
+  . $CONF_FILE
+else
+  echo "Configuration file not found"
+  exit 1
+fi
+
+
 
 REPLACE=$(echo ${SERVER} | cut -f1 -d\.)
 
