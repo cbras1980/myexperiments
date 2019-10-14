@@ -8,30 +8,6 @@ cd /tmp/vhannibal/
 #wget "http://www.vhannibal.net/download_setting.php?id=8&action=download" -O vhne1.rar
 #sleep 2
 
-## ENIGMA1
-#if [ -f vhne1.rar ]; then
-#LISTFOLDER=$(unrar v vhne1.rar | grep Vhann | sed -e "s/^ //" | cut -f1 -d"/" | grep -v rar | uniq)
-#md5sum -c /tmp/vhne1.md5
-#if [ $? -ne 0 ]; then
-#echo "$DT - Processing list: $LISTFOLDER" >> $LOGFILE
-#unrar x vhne1.rar
-#mv "$LISTFOLDER" source
-#tar xfvz /var/www/zeus.claranet.pt/lista_e1.tar.gz
-#rsync -av --delete --update --include-from=/var/www/zeus.claranet.pt/LISTFILE_E1 --exclude="*" source/ lista_e1/
-#echo "#NAME ---------- $(stat -c %y lista_e1/services | cut -f1 -d\ ) ----------" > lista_e1/userbouquet.dbe00.tv
-#tar czvf /var/www/zeus.claranet.pt/lista_e1.tar.gz lista_e1/
-##find /tmp -iname "*.rar" -delete
-#md5sum vhne1.rar > /tmp/vhne1.md5
-#rm -rf /tmp/vhannibal
-#else
-#echo "$DT - E1 List has not been updated. Skipping." >> $LOGFILE
-#fi
-#else
-#echo "$DT - File vhne1.rar not found. something went wrong with the download of the file" >> $LOGFILE
-#fi
-
-#cd /tmp
-#rm -rf /tmp/vhannibal/*
 mkdir -p /tmp/vhannibal/
 cd /tmp/vhannibal/
 

@@ -1,0 +1,39 @@
+#!/bin/bash
+# Variables                                                          
+                                                   
+# System load                                      
+LOAD="$(awk '{print $1, $2, $3}' /proc/loadavg)"   
+PSA="$(ps -Afl | wc -l)"                           
+                                                   
+#IP="$(hostname -i)"                               
+HOME=$(df -Ph / | tail -n1 | awk '{print $4}' | tr -d '\n')
+#BACKUP=$(df -Ph | grep backup | awk '{print $4}' | tr -d '\n')
+NUM_UNIQUE_USERS="$(users | tr ' ' '\n' | sort | uniq | wc -w)"
+#MEMORY="$(free -m | grep "Mem" | awk '{print $2,"-",$3,"-",$4}')"
+#SWAP=$(free -m | grep "Swap" | awk '{print $2,"-",$3,"-",$4}')   
+#TEMPERATURE="$(sensors -f | grep Core | awk '{print $3}' | xargs)"
+                                                                   
+# System uptime                                                    
+uptime="$(cut -f1 -d. < /proc/uptime)"                             
+upDays="$((uptime / 60 / 60 / 24))"                                
+upHours="$((uptime / 60 / 60 % 24))"                               
+upMins="$((uptime / 60 % 60))"                                     
+upSecs=i"$((uptime % 60))"                                         
+                                                                   
+# Display                                                          
+
+
+wget -qO- "http://mephisto.malignia.net/enigma/figlet.php?string=$(hostname)"
+echo                                                               
+echo 'Hostname' "${HOSTNAME}"                                      
+#echo 'CPU usage' "${LOAD}"                                        
+#echo 'Cores Temperature' "${COLOR_YELLOW}${STYLE_BOLD}${TEMPERATURE}"
+#echo 'Processes' "${PSA} running"                                    
+#echo 'System uptime' "$upDays days $upHours hours $upMins minutes $upSecs seconds"
+#echo 'Users' "Currently ${STYLE_BOLD}${NUM_UNIQUE_USERS}${RESET_TEXT}${COLOR_BLUE} user(s) logged on"
+#echo 'Disk space' "${COLOR_GREEN}${HOME} remaining"                                                  
+                                                                                                      
+/usr/sbin/enigmaInfo.py                                                                              
+echo
+echo "Updated $(date)"
+echo

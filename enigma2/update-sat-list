@@ -1,0 +1,39 @@
+#!/bin/sh
+# MADE BY A MEGA MASTER MIND :)
+. /etc/updatelist.cfg
+sleep 5 
+CT=`date +%Y%m%d%H%M`
+listUpdate () {
+cd $PASTATMP
+#rm -rf $PASTAENIGMA2/bouquet*
+#rm -rf $PASTAENIGMA2/userbouquet*
+#rm -rf $PASTAENIGMA2/sattelites.xml
+#rm -rf $PASTAENIGMA2/blacklist
+#rm -rf $PASTAENIGMA2/whitelist
+#rm -rf $PASTAENIGMA2/lamedb
+for i in `tar zxvf "$PASTATMP/$LISTA" | xargs -0`
+do
+if [ -f "$i" ]
+then
+cp $i $PASTAENIGMA2
+fi
+done
+echo "$CT - Lista actualizada." >$LOG
+}
+
+echo "$CT - A fazer o download da lista: $LISTA do servidor $SERVIDOR..." >>$LOG
+cd $PASTATMP
+wget -O "$PASTATMP/$LISTA" "http://$SERVIDOR/$LISTA" 2>/dev/null
+if [ $? -eq 0 ]; then
+if [ -f "$PASTATMP/$LISTA" ]; then
+listUpdate
+else
+echo "$CT - Nao consegui obter a lista $LISTA do servidor $SERVIDOR, provavelmente esta inacessivel. Verifique as configuracoes em /etc/updatelist.cfg" >>$LOG
+exit 1
+fi
+else
+echo "$CT - Nao foi possivel fazer o download da lista. Por favor verifique as configuracoes em /etc/updatelist.cfg" >>$LOG
+exit 1
+fi
+rm $PASTATMP/$LISTA
+exit 0

@@ -1,0 +1,13 @@
+#!/bin/bash
+counter=0
+while [[ "$counter" -lt 20 ]]; do
+RDATE=$(wget -qO- http://mephisto.malignia.net/enigma/clock.php)
+LDATE=$(date -u +%Y%m%d%H%M)
+if [ "x$RDATE" == "x$LDATE" ]; then
+echo "Clock OK"
+exit 0
+fi
+let counter++
+sleep 1
+done
+exit

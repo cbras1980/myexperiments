@@ -1,0 +1,41 @@
+#!/bin/sh
+#################################################
+# Create config file with:
+# USER="username"
+# PASS="password"
+# HOST="hostname"
+# Software needed: sshpass, python
+#################################################
+CONF_FILE="/etc/remotessh.conf"
+
+[ -x /usr/bin/sshpass ] || exit 0
+[ -x /usr/bin/ssh ] || exit 0
+[ -f /etc/remotessh.conf ] || exit 0
+
+set -e
+
+. $CONF_FILE
+
+PORT=$(python -c "import random;print(random.randrange($LOW,$HIGH))")
+
+case "$1" in
+        start)
+                echo -n "Starting Remote SSH on PORT $PORT: "
+                /usr/bin/sshpass -p $PASS /usr/bin/ssh -y $USER@$HOST "echo $PORT > $(hostname).txt"
+                start-stop-daemon -S -x /usr/bin/sshpass -- -p $PASS /usr/bin/ssh -y -f -N -R $PORT:127.0.0.1:22 $USER@$HOST
+                [ $? = 0 ] && echo "OK" || echo "FAIL"
+                ;;
+        stop)
+                echo -n "Stopping Remote SSH: "
+                start-stop-daemon -K -q -x /usr/bin/ssh
+                [ $? = 0 ] && echo "OK" || echo "FAIL"
+                ;;
+        restart)
+                "$0" stop
+                sleep 1
+                "$0" start
+                ;;
+        *)
+                echo "Usage: $0 {start|stop|restart}"
+                ;;
+esac

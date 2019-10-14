@@ -7,10 +7,10 @@ import fcntl, socket, struct
 import xml.etree.ElementTree as ET
 from urllib2 import urlopen, URLError, HTTPError
 
-webserverurl="http://server.example.com/"
-sshserver="server.example.com"
-sshuser="sshuser"
-iptv_server=sshserver
+server="mephisto.malignia.net"
+remote_ssh_host=server
+remote_ssh_user="boxes"
+iptv_server=server
 
 def getBoxData():
     try:
@@ -19,10 +19,10 @@ def getBoxData():
         exit_code = process.wait()
     except OSError:
         raise Exception("Error!")
-
+               
     deviceinfo = ET.parse('/tmp/deviceinfo.xml')
     boxdata = {}
-
+             
     for child in deviceinfo.getroot().iter():
         boxdata[child.tag]=child.text
     return boxdata
@@ -30,7 +30,7 @@ def getBoxData():
 def getAllMacs():
     macs = {}
     try:
-        process = Popen(["wget", "-q", "-O-", "{}/boxes".format(webserverurl)], stdout=PIPE)
+        process = Popen(["wget", "-q", "-O-", "http://{}/enigma/boxes".format(server)], stdout=PIPE)
         (output, err) = process.communicate()
         exit_code = process.wait()
     except OSError:
@@ -53,7 +53,7 @@ def dlfile(url):
 
 def main(argv):
     if len(argv) < 4:
-        sys.stderr.write("Usage: {} <ssh_password> <iptv_user> <iptv_pass>\n".format(argv[0]))
+        sys.stderr.write("Usage: {} <ssh_password> <iptv_user> <iptv_pass>\n".format(argv[0]))    
         return 1
 
     boxdata=getBoxData()
@@ -65,7 +65,7 @@ def main(argv):
     else:
       print "Sorry box not found"
       exit(1)
-
+  
     #Set Hostname
     f = open("/etc/hostname", "w")
     f.write(macs[mac])
@@ -74,7 +74,7 @@ def main(argv):
     #Downloading necessary software
 
     #IPTV List Update
-    dlfile("{}/updateIPTVlist.sh".format(webserverurl))
+    dlfile("http://{}/enigma/updateIPTVlist.sh".format(server))
     iptv_user=argv[2]
     iptv_pass=argv[3]
     f = open("/etc/iptvlist.conf", "w")
@@ -85,25 +85,25 @@ def main(argv):
     os.system('ln -sf /etc/init.d/updateIPTVlist.sh /etc/rcS.d/S99updateiptvlist')
 
     #RemoteSSH
-    sshpass=argv[1]
-    dlfile("{}/openRemoteSSH.sh".format(webserverurl))
+    remote_ssh_pass=argv[1]
+    dlfile("http://{}/enigma/openRemoteSSH.sh".format(server))
     f = open("/etc/remotessh.conf", "w")
-    f.write("HOST=\"{}\"\nUSER=\"{}\"\nPASS=\"{}\"\n".format(sshserver,sshuser,sshpass))
+    f.write("HOST=\"{}\"\nUSER=\"{}\"\nPASS=\"{}\"\n".format(remote_ssh_host,remote_ssh_user,remote_ssh_pass))
     f.close()
     os.system('cp openRemoteSSH.sh /etc/init.d/openRemoteSSH.sh')
     os.system('chmod +x /etc/init.d/openRemoteSSH.sh')
     os.system('ln -sf /etc/init.d/openRemoteSSH.sh /etc/rcS.d/S98remotessh')
 
     #MOTD
-    dlfile("{}/make-motd".format(webserverurl))
-    dlfile("{}/enigmaInfo.py".format(webserverurl))
+    dlfile("http://{}/enigma/make-motd".format(server))
+    dlfile("http://{}/enigma/enigmaInfo.py".format(server))
     os.system('cp make-motd /usr/sbin/make-motd')
     os.system('chmod +x /usr/sbin/make-motd')
     os.system('cp enigmaInfo.py /usr/sbin/enigmaInfo.py')
     os.system('chmod +x /usr/sbin/enigmaInfo.py')
     os.system('/usr/sbin/make-motd > /etc/motd')
     os.system('echo \'Box Provisioned: {}\' > /etc/provisioned'.format(datetime.datetime.now()))
-
+    
     print("Finished")
 
 if __name__ == '__main__':
