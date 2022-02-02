@@ -53,6 +53,7 @@ loglines = follow()
 bounties = []
 
 lastkill = 0
+elapsed = 0
 
 for line in loglines:
   m = None
@@ -60,7 +61,7 @@ for line in loglines:
   try:
     if lastkill != 0: elapsed = time.time() - lastkill
     if elapsed >= 3600:
-      m = "Is has been more then one hour since last ship was killed. I am sutting down."      
+      m = "Is has been more then one hour since last ship was killed. I am sutting down."    
       send_msg(m)
       shutdown()
       exit()
