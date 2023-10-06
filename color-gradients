@@ -66,125 +66,125 @@ Temperature Color Gradients:
 Color Thresholds for mini-graph in HA:
 
 color_thresholds:
-  - value: -20
-    color: #7C3AED
-  - value: -19
-    color: #7541ED
-  - value: -18
-    color: #6F48EE
-  - value: -17
-    color: #684FEF
-  - value: -16
-    color: #6256F0
-  - value: -15
-    color: #5B5EF1
-  - value: -14
-    color: #5565F2
-  - value: -13
-    color: #4E6CF3
-  - value: -12
-    color: #4873F4
-  - value: -11
-    color: #417AF5
-  - value: -10
-    color: #3B82F6
-  - value: -9
-    color: #4D8DF6
-  - value: -8
-    color: #5F99F7
-  - value: -7
-    color: #71A4F8
-  - value: -6
-    color: #83B0F9
-  - value: -5
-    color: #95BCFA
-  - value: -4
-    color: #A7C7FB
-  - value: -3
-    color: #B9D3FC
-  - value: -2
-    color: #CBDEFD
-  - value: -1
-    color: #DDEAFE
-  - value: 0
-    color: #EFF0FF
-  - value: 1
-    color: #D8EFF2
-  - value: 2
-    color: #C2E9E5
-  - value: 3
-    color: #ACE3D9
-  - value: 4
-    color: #95DDCC
-  - value: 5
-    color: #7FD7C0
-  - value: 6
-    color: #69D1B3
-  - value: 7
-    color: #52CBA6
-  - value: 8
-    color: #3CC59A
-  - value: 9
-    color: #26BF8D
-  - value: 10
-    color: #10B981
-  - value: 11
-    color: #27BB7B
-  - value: 12
-    color: #3FBE76
-  - value: 13
-    color: #56C071
-  - value: 14
-    color: #6EC36C
-  - value: 15
-    color: #86C667
-  - value: 16
-    color: #9DC861
-  - value: 17
-    color: #B5CB5C
-  - value: 18
-    color: #CCCD57
-  - value: 19
-    color: #E4D052
-  - value: 20
-    color: #FCD34D
-  - value: 21
-    color: #FBC94C
-  - value: 22
-    color: #FABF4B
-  - value: 23
-    color: #F9B64B
-  - value: 24
-    color: #F8AC4A
-  - value: 25
-    color: #F7A34A
-  - value: 26
-    color: #F69949
-  - value: 27
-    color: #F59048
-  - value: 28
-    color: #F58648
-  - value: 29
-    color: #F47D47
-  - value: 30
-    color: #F37347
-  - value: 31
-    color: #F26A46
-  - value: 32
-    color: #F16045
-  - value: 33
-    color: #F05745
-  - value: 34
-    color: #EF4D44
-  - value: 35
-    color: #EF4444
-  - value: 36
-    color: #EE4455
-  - value: 37
-    color: #ED4566
-  - value: 38
-    color: #ED4677
-  - value: 39
-    color: #EC4788
-  - value: 40
-    color: #EC4899
+  - value: '-20'
+    color: '#7C3AED'
+  - value: '-19'
+    color: '#7541ED'
+  - value: '-18'
+    color: '#6F48EE'
+  - value: '-17'
+    color: '#684FEF'
+  - value: '-16'
+    color: '#6256F0'
+  - value: '-15'
+    color: '#5B5EF1'
+  - value: '-14'
+    color: '#5565F2'
+  - value: '-13'
+    color: '#4E6CF3'
+  - value: '-12'
+    color: '#4873F4'
+  - value: '-11'
+    color: '#417AF5'
+  - value: '-10'
+    color: '#3B82F6'
+  - value: '-9'
+    color: '#4D8DF6'
+  - value: '-8'
+    color: '#5F99F7'
+  - value: '-7'
+    color: '#71A4F8'
+  - value: '-6'
+    color: '#83B0F9'
+  - value: '-5'
+    color: '#95BCFA'
+  - value: '-4'
+    color: '#A7C7FB'
+  - value: '-3'
+    color: '#B9D3FC'
+  - value: '-2'
+    color: '#CBDEFD'
+  - value: '-1'
+    color: '#DDEAFE'
+  - value: '0'
+    color: '#EFF0FF'
+  - value: '1'
+    color: '#D8EFF2'
+  - value: '2'
+    color: '#C2E9E5'
+  - value: '3'
+    color: '#ACE3D9'
+  - value: '4'
+    color: '#95DDCC'
+  - value: '5'
+    color: '#7FD7C0'
+  - value: '6'
+    color: '#69D1B3'
+  - value: '7'
+    color: '#52CBA6'
+  - value: '8'
+    color: '#3CC59A'
+  - value: '9'
+    color: '#26BF8D'
+  - value: '10'
+    color: '#10B981'
+  - value: '11'
+    color: '#27BB7B'
+  - value: '12'
+    color: '#3FBE76'
+  - value: '13'
+    color: '#56C071'
+  - value: '14'
+    color: '#6EC36C'
+  - value: '15'
+    color: '#86C667'
+  - value: '16'
+    color: '#9DC861'
+  - value: '17'
+    color: '#B5CB5C'
+  - value: '18'
+    color: '#CCCD57'
+  - value: '19'
+    color: '#E4D052'
+  - value: '20'
+    color: '#FCD34D'
+  - value: '21'
+    color: '#FBC94C'
+  - value: '22'
+    color: '#FABF4B'
+  - value: '23'
+    color: '#F9B64B'
+  - value: '24'
+    color: '#F8AC4A'
+  - value: '25'
+    color: '#F7A34A'
+  - value: '26'
+    color: '#F69949'
+  - value: '27'
+    color: '#F59048'
+  - value: '28'
+    color: '#F58648'
+  - value: '29'
+    color: '#F47D47'
+  - value: '30'
+    color: '#F37347'
+  - value: '31'
+    color: '#F26A46'
+  - value: '32'
+    color: '#F16045'
+  - value: '33'
+    color: '#F05745'
+  - value: '34'
+    color: '#EF4D44'
+  - value: '35'
+    color: '#EF4444'
+  - value: '36'
+    color: '#EE4455'
+  - value: '37'
+    color: '#ED4566'
+  - value: '38'
+    color: '#ED4677'
+  - value: '39'
+    color: '#EC4788'
+  - value: '40'
+    color: '#EC4899'
